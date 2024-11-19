@@ -1,0 +1,216 @@
+<div class="contact-add-container">
+  <div class="block-container">
+    <h2>Add Contact</h2>
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <div class="group group-container">
+        <div class="form-group" id="name">
+          <label for="nameContact">Nome</label>
+          <input type="text" id="nameContact" formControlName="nameContact" required>
+          <span class="error" *ngIf="fieldValid('nameContact')">
+            {{ getFieldError('nameContact') || 'Name is required.' }}
+          </span>
+        </div>
+
+        <div class="form-group nick">
+          <label for="nicknameContact">Apelido</label>
+          <input type="text" id="nicknameContact" formControlName="nicknameContact">
+          <span class="error" *ngIf="fieldValid('nicknameContact')">
+            {{ getFieldError('nicknameContact') || 'Nickname is required.' }}
+          </span>
+        </div>
+
+        <div class="form-group combo-box">
+          <label for="dateBirthContact">Data de Nascimento</label>
+          <input type="date" id="dateBirthContact" formControlName="dateBirthContact">
+          <span class="error" *ngIf="fieldValid('dateBirthContact')">
+            {{ getFieldError('dateBirthContact') || 'Date of Birth is required.' }}
+          </span>
+        </div>
+      </div>
+
+      <div formArrayName="phoneNumbers" class="group-container">
+        <h3>Telefones</h3>
+        <form [formGroup]="phoneForm" (ngSubmit)="addPhoneNumber()" class="group">
+          <div class="form-group nick">
+            <label for="phoneNumber">Telefone</label>
+            <input type="text" id="phoneNumber" formControlName="phoneNumber" required mask="(00) 00000-0000">
+            <span class="error" *ngIf="fieldValid('phoneNumber')">
+              {{ getFieldError('phoneNumbers.') || 'Phone Number is required.' }}
+            </span>
+          </div>
+
+          <div class="form-group combo-box">
+            <label for="tagPhone">Tag</label>
+            <select id="tagPhone" formControlName="tagPhone" required>
+              <option *ngFor="let tag of tagPhoneOptions" [value]="tag">{{ tag }}</option>
+            </select>
+            <span class="error" *ngIf="fieldValid('tagPhone')">
+              {{ getFieldError('phoneNumbers.') || 'Phone Number is required.' }}
+            </span>
+          </div>
+          <button type="submit">Add</button>
+        </form>
+
+        <table *ngIf="getArray('phoneNumbers').length > 0">
+          <thead>
+          <tr>
+            <th>Número de Telefone</th>
+            <th>Tag</th>
+            <th class="actions">Ações</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let phone of getArray('phoneNumbers'); let i = index" [formGroupName]="i">
+            <td >{{ getNumber(phone.get('phoneNumber')?.value) }}</td>
+            <td>{{ phone.get('tagPhone')?.value }}</td>
+            <td class="group-action">
+              <button type="button" (click)="editPhoneNumber(i)" class="action">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" (click)="removePhoneNumber(i)" class="action">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div formArrayName="mails" class="group-container">
+        <h3>Emails</h3>
+        <form [formGroup]="mailForm" (ngSubmit)="addMail()" class="group">
+          <div class="form-group nick">
+            <label for="mail">Email</label>
+            <input type="email" id="mail" formControlName="mail" required>
+            <span class="error" *ngIf="fieldValid('mail')">
+                    {{ getFieldError('mails.') || 'Email is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group combo-box">
+            <label for="tagMail">Tag</label>
+            <select id="tagMail" formControlName="tagMail" required>
+              <option *ngFor="let tag of tagMailOptions" [value]="tag">{{ tag }}</option>
+            </select>
+            <span class="error" *ngIf="fieldValid('tagMail')">
+                    {{ getFieldError('mails.') || 'Tag is required.' }}
+                  </span>
+          </div>
+          <button type="submit">Add</button>
+        </form>
+
+        <table *ngIf="getArray('mails').length > 0">
+          <thead>
+          <tr>
+            <th>Email</th>
+            <th>Tag</th>
+            <th class="actions">Ações</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let mail of getArray('mails'); let i = index" [formGroupName]="i">
+            <td>{{ mail.get('mail')?.value }}</td>
+            <td>{{ mail.get('tagMail')?.value }}</td>
+            <td class="group-action">
+              <button type="button" (click)="editMail(i)" class="action">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" (click)="removeMail(i)" class="action">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div formArrayName="addresses" class="group-container">
+        <h3>Endereços</h3>
+        <form [formGroup]="addressForm" (ngSubmit)="addAddress()" class="group">
+          <div class="form-group nick">
+            <label for="codeAddress">CEP</label>
+            <input type="text" id="codeAddress" formControlName="codeAddress" required (blur)="findAddress()">
+            <span class="error" *ngIf="fieldValid('codeAddress')">
+                    {{ getFieldError('addresses.') || 'Postal Code is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group nick">
+            <label for="streetAddress">Rua</label>
+            <input type="text" id="streetAddress" formControlName="streetAddress" required>
+            <span class="error" *ngIf="fieldValid('streetAddress')">
+                    {{ getFieldError('addresses.') || 'Street is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group nick">
+            <label for="districtAddress">Bairro</label>
+            <input type="text" id="districtAddress" formControlName="districtAddress" required>
+            <span class="error" *ngIf="fieldValid('districtAddress')">
+                    {{ getFieldError('addresses.') || 'District is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group nick">
+            <label for="cityAddress">Cidade</label>
+            <input type="text" id="cityAddress" formControlName="cityAddress" required>
+            <span class="error" *ngIf="fieldValid('cityAddress')">
+                    {{ getFieldError('addresses.') || 'City is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group nick">
+            <label for="countryAddress">UF</label>
+            <input type="text" id="countryAddress" formControlName="countryAddress" required>
+            <span class="error" *ngIf="fieldValid('countryAddress')">
+                    {{ getFieldError('addresses.') || 'Country is required.' }}
+                  </span>
+          </div>
+
+          <div class="form-group nick">
+            <label for="isWorkAddress">Endereço de Trabalho</label>
+            <input type="checkbox" id="isWorkAddress" formControlName="isWorkAddress">
+          </div>
+          <button type="submit">Add</button>
+        </form>
+
+        <table *ngIf="getArray('addresses').length > 0">
+          <thead>
+          <tr>
+            <th>CEP</th>
+            <th>Rua</th>
+            <th>Bairro</th>
+            <th>Cidade</th>
+            <th>UF</th>
+            <th>E de Trabalho</th>
+            <th class="actions">Ações</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let address of getArray('addresses'); let i = index" [formGroupName]="i">
+            <td>{{ address.get('codeAddress')?.value }}</td>
+            <td>{{ address.get('streetAddress')?.value }}</td>
+            <td>{{ address.get('districtAddress')?.value }}</td>
+            <td>{{ address.get('cityAddress')?.value }}</td>
+            <td>{{ address.get('countryAddress')?.value }}</td>
+            <td>{{ address.get('isWorkAddress')?.value ? 'Yes' : 'No' }}</td>
+            <td class="group-action">
+              <button type="button" (click)="editAddress(i)" class="action">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button type="button" (click)="removeAddress(i)" class="action">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button type="submit">Add Contact</button>
+      <div *ngIf="serverError" class="error">
+        {{ serverError }}
+      </div>
+    </form>
+  </div>
+</div>

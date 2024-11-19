@@ -1,0 +1,46 @@
+header {
+  background-color: #343a40; /* Cor de fundo mais escura */
+  color: #ffffff; /* Texto branco para contraste */
+  padding: 15px; /* Aumentar o padding para mais espaço */
+  border-bottom: 2px solid #495057; /* Borda inferior mais escura */
+  position: fixed; /* Fixar o cabeçalho no topo da página */
+  width: 100%; /* Largura total do cabeçalho */
+  z-index: 1000; /* Colocar o cabeçalho acima de outros elementos */
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px; /* Aumentar o tamanho da fonte */
+  font-weight: bold; /* Tornar o texto em negrito */
+}
+
+p {
+  margin: 0;
+  font-size: 18px; /* Aumentar o tamanho da fonte */
+}
+
+button {
+  padding: 8px 15px; /* Aumentar o padding do botão */
+  font-size: 18px; /* Aumentar o tamanho da fonte */
+  cursor: pointer;
+  background-color: #007bff; /* Cor de fundo do botão */
+  color: #ffffff; /* Cor do texto do botão */
+  border: none; /* Remover borda do botão */
+  border-radius: 4px; /* Adicionar borda arredondada */
+}
+
+button:hover {
+  background-color: #0056b3; /* Cor de fundo do botão ao passar o mouse */
+}
+
+
+a{
+  text-decoration: none;
+  color: #ffffff;
+}

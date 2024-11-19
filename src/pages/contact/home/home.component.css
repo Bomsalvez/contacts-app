@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  justify-content: center; /* Centraliza os cards horizontalmente */
+  align-items: center; /* Centraliza os cards verticalmente */
+  height: 100vh; /* Define a altura do contêiner para 100% da altura da tela */
+  gap: 16px; /* Espaçamento entre os cards */
+}
+
+.itens {
+  background-color: #e0f7fa; /* Cor de fundo dos cards */
+  border: 1px solid #0077b6; /* Cor da borda */
+  border-radius: 12px; /* Cantos mais arredondados */
+  width: 220px; /* Largura dos cards */
+  height: 220px; /* Altura dos cards */
+  padding: 20px; /* Espaçamento interno */
+  margin: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra mais pronunciada */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Arial', sans-serif; /* Fonte */
+  color: #000000; /* Cor do texto */
+  font-size: 1.5em; /* Tamanho da fonte */
+  text-decoration: none; /* Remove o sublinhado */
+}
+
+.itens:hover {
+  transform: scale(1.1); /* Aumenta mais ao passar o mouse */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra mais intensa */
+}

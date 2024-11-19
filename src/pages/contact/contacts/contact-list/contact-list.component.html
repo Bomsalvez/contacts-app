@@ -1,0 +1,25 @@
+<div class="contact-list">
+  <h1>Contact List</h1>
+  <form [formGroup]="filterForm" (ngSubmit)="findMultipleContact()">
+    <div>
+      <label for="nameContact">Name:</label>
+      <input id="nameContact" formControlName="nameContact" type="text">
+    </div>
+    <div>
+      <label for="mailContact">Email:</label>
+      <input id="mailContact" formControlName="mailContact" type="email">
+    </div>
+    <button type="submit">Filter</button>
+  </form>
+
+  <ul>
+    <li *ngFor="let contact of contacts">
+      <div>
+        <strong>Name:</strong> {{ contact.nameContact }}
+      </div>
+      <div>
+        <strong>Email:</strong> {{ contact.phoneNumbers }}
+      </div>
+    </li>
+  </ul>
+</div>

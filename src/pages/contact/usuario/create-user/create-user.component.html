@@ -1,0 +1,32 @@
+<div class="create-user-container">
+  <div class="block-container">
+    <h2>Create Account</h2>
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" formControlName="nameUser" required>
+        <span class="error" *ngIf="fieldValid('nameUser')">
+          {{ getFieldError('nameUser') || 'Name is required.' }}
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="mailUser" required>
+        <span class="error" *ngIf="fieldValid('mailUser')">
+          {{ getFieldError('mailUser') || 'Valid email is required.' }}
+        </span>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" formControlName="passwordUser" required>
+        <span class="error" *ngIf="fieldValid('passwordUser')">
+          {{ getFieldError('passwordUser') || 'Password is required.' }}
+        </span>
+      </div>
+      <button type="submit">Criar Conta</button>
+      <div *ngIf="serverError" class="error">
+        {{ serverError }}
+      </div>
+    </form>
+  </div>
+</div>

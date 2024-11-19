@@ -1,0 +1,145 @@
+.contact-add-container {
+  padding: 10% 20px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.group-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #f2f2f2;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.group {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+
+.group button {
+  width: 20%;
+  height: 30px;
+  margin-top: 0;
+}
+
+.group table {
+  width: 60%;
+}
+
+.group #name {
+  width: 50%;
+}
+
+.group .nick {
+  width: 25%;
+}
+
+.group .combo-box {
+  width: 20%;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1em;
+  margin-top: 25px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  font-size: 0.875em;
+  margin-top: 5px;
+}
+
+button[type="button"] {
+  margin-top: 10px;
+  background-color: #28a745;
+}
+
+button[type="button"]:hover {
+  background-color: #218838;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #3a465e;
+}
+
+.group-action {
+  display: flex;
+  justify-content: center;
+}
+
+.action {
+  display: flex;
+  justify-content: center;
+  width: 10px;
+  margin: 0 5px;
+}
+
+

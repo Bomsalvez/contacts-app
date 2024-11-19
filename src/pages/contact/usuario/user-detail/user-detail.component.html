@@ -1,0 +1,48 @@
+<div class="user-detail">
+  <div class="block-detail" *ngIf="user; else loading">
+    <h2>Detalhes do Usuário</h2>
+    <p><strong>Name:</strong> {{ user.nameUser }}</p>
+    <p><strong>Email:</strong> {{ user.mailUser }}</p>
+    <div *ngIf="getRole()">
+      <button *ngIf="!users" (click)="getUsers()">Listar Usuários</button>
+    </div>
+  </div>
+  <ng-template #loading>
+    <p>Loading user details...</p>
+  </ng-template>
+
+  <div class="block-detail" *ngIf="users">
+    <form [formGroup]="filterForm" (ngSubmit)="getUsers()" class="filter-form">
+      <div>
+        <label for="nameUser">Nome:</label>
+        <input id="nameUser" placeholder="Nome" formControlName="nameUser">
+      </div>
+      <div>
+        <label for="mailUser">Email:</label>
+        <input id="mailUser" placeholder="Email" formControlName="mailUser">
+      </div>
+      <button type="submit">Listar Usuários</button>
+    </form>
+
+    <div *ngIf="users">
+      <h3>Lista de Usuários</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.nameUser }}</td>
+          <td>{{ user.mailUser }}</td>
+          <td>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
