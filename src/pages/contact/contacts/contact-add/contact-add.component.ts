@@ -5,6 +5,8 @@ import {ContactService} from '../../../../shared/services/contact/contact.servic
 import {NgForOf, NgIf} from '@angular/common';
 import {TagMail, TagPhone} from '../../../../model/Contact';
 import {NgxMaskDirective} from 'ngx-mask';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SearchCepService} from '../../../../shared/services/search-cep/search-cep.service';
 
 @Component({
   selector: 'app-contact-add',
@@ -30,14 +32,29 @@ export class ContactAddComponent implements OnInit {
   serverError: string | null = null;
   tagPhoneOptions = Object.values(TagPhone);
   tagMailOptions = Object.values(TagMail);
+  private pkContact!: number;
 
   constructor(
     private readonly title: Title,
     private readonly formBuilder: FormBuilder,
-    private readonly contactService: ContactService) {
+    private readonly router: Router,
+    private readonly contactService: ContactService,
+    private readonly route: ActivatedRoute,
+    protected readonly searchCepService: SearchCepService) {
   }
 
   ngOnInit(): void {
+
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.pkContact = +params['id'];
+        this.loadContact(this.pkContact);
+      }
+    });
+
+    if (localStorage.getItem('token') === null) {
+      this.router.navigate(['/login']); // Redirect to login page
+    }
     this.title.setTitle('Add Contato');
     this.contactForm = this.formBuilder.group({
       nameContact: [null, [Validators.required]],
@@ -54,6 +71,7 @@ export class ContactAddComponent implements OnInit {
 
   createPhoneNumberGroup(): FormGroup {
     return this.formBuilder.group({
+      pkPhoneNumber: [null],
       phoneNumber: [null, [Validators.required]],
       tagPhone: [TagPhone.PRINCIPAL, [Validators.required]]
     });
@@ -61,6 +79,7 @@ export class ContactAddComponent implements OnInit {
 
   createMailGroup(): FormGroup {
     return this.formBuilder.group({
+      pkMail: [null],
       mail: [null, [Validators.required]],
       tagMail: [TagMail.PRINCIPAL, [Validators.required]]
     });
@@ -68,12 +87,13 @@ export class ContactAddComponent implements OnInit {
 
   createAddressGroup(): FormGroup {
     return this.formBuilder.group({
+      pkAddress: [null],
       codeAddress: [null, [Validators.required]],
       streetAddress: [null, [Validators.required]],
       districtAddress: [null, [Validators.required]],
       cityAddress: [null, [Validators.required]],
       countryAddress: [null, [Validators.required]],
-      isWorkAddress: [null]
+      isWorkAddress: [false]
     });
   }
 
@@ -104,22 +124,36 @@ export class ContactAddComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.contactForm.value);
     if (this.contactForm.valid) {
-      this.contactService.addContact(this.contactForm.value).subscribe({
-        next: () => {
-          // Redirect to contact list
-        },
-        error: (err) => {
-          if (err.error && err.error.fieldErrors) {
-            this.setFieldErrors(err.error.fieldErrors);
-          } else if (err.error && err.error.error) {
-            this.serverError = err.error.error;
-          } else {
-            this.serverError = err.error.message || 'An error occurred. Please try again.';
+      if (this.pkContact) {
+        this.contactService.editContact(this.contactForm.value, this.pkContact).subscribe({
+          next: () => {
+            // Redirect to contact list
+          },
+          error: (err) => {
+            console.error(err);
+            if (err.error) {
+              this.setFieldErrors(err.error);
+            } else {
+              this.serverError = err.error.message || 'An error occurred. Please try again.';
+            }
           }
-        }
-      });
+        });
+      } else {
+        this.contactService.addContact(this.contactForm.value).subscribe({
+          next: () => {
+            // Redirect to contact list
+          },
+          error: (err) => {
+            console.error(err);
+            if (err.error) {
+              this.setFieldErrors(err.error);
+            } else {
+              this.serverError = err.error.message || 'An error occurred. Please try again.';
+            }
+          }
+        });
+      }
     } else {
       this.formValid(this.contactForm);
     }
@@ -190,35 +224,26 @@ export class ContactAddComponent implements OnInit {
     this.addressList.splice(i, 1);
   }
 
-  findAddress() {
-    const cep = this.addressForm.get('codeAddress');
-    if (cep?.value) {
-      const url = `https://viacep.com.br/ws/${cep.value}/json/`;
-      fetch(url)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('CEP not found');
-          }
-          return response.json();
-        })
-        .then(address => {
-          this.addressForm.patchValue({
-            streetAddress: address.logradouro,
-            districtAddress: address.bairro,
-            cityAddress: address.localidade,
-            countryAddress: address.uf
-          });
-        })
-        .catch(err => {
-          this.addressForm.get('codeAddress')?.setErrors({serverError: 'CEP not found'});
-        });
-    }
-  }
-
   getNumber(phoneNumber: string): string {
     if (phoneNumber.length === 11) {
       return `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 7)}-${phoneNumber.substring(7, 11)}`;
     }
     return `(${phoneNumber.substring(0, 2)}) ${phoneNumber.substring(2, 6)}-${phoneNumber.substring(6, 10)}`;
+  }
+
+  private loadContact(pkContact: number): void {
+    this.contactService.findContact(pkContact).subscribe(contact => {
+      this.contactForm.patchValue(contact);
+      this.phoneList = contact.phoneNumbers;
+      this.mailList = contact.mails;
+      this.addressList = contact.addresses;
+      this.updateFormArrays();
+    });
+  }
+
+  private updateFormArrays(): void {
+    this.contactForm.setControl('phoneNumbers', this.formBuilder.array(this.phoneList.map(phone => this.formBuilder.group(phone))));
+    this.contactForm.setControl('mails', this.formBuilder.array(this.mailList.map(mail => this.formBuilder.group(mail))));
+    this.contactForm.setControl('addresses', this.formBuilder.array(this.addressList.map(address => this.formBuilder.group(address))));
   }
 }

@@ -129,7 +129,7 @@
         <form [formGroup]="addressForm" (ngSubmit)="addAddress()" class="group">
           <div class="form-group nick">
             <label for="codeAddress">CEP</label>
-            <input type="text" id="codeAddress" formControlName="codeAddress" required (blur)="findAddress()">
+            <input type="text" id="codeAddress" formControlName="codeAddress" required (blur)="searchCepService.findAddress(addressForm)" mask="00000-000">
             <span class="error" *ngIf="fieldValid('codeAddress')">
                     {{ getFieldError('addresses.') || 'Postal Code is required.' }}
                   </span>

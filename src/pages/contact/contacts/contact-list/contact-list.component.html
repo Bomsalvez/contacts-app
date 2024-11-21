@@ -1,25 +1,48 @@
 <div class="contact-list">
-  <h1>Contact List</h1>
-  <form [formGroup]="filterForm" (ngSubmit)="findMultipleContact()">
-    <div>
-      <label for="nameContact">Name:</label>
-      <input id="nameContact" formControlName="nameContact" type="text">
-    </div>
-    <div>
-      <label for="mailContact">Email:</label>
-      <input id="mailContact" formControlName="mailContact" type="email">
-    </div>
-    <button type="submit">Filter</button>
-  </form>
+  <div class="group-container">
+    <h1>Contact List</h1>
+    <form [formGroup]="filterForm" (ngSubmit)="findMultipleContact()" class="filter">
+      <div>
+        <label for="nameContact">Name:</label>
+        <input id="nameContact" formControlName="nameContact" type="text">
+      </div>
+      <button type="submit">Buscar</button>
+    </form>
 
-  <ul>
-    <li *ngFor="let contact of contacts">
-      <div>
-        <strong>Name:</strong> {{ contact.nameContact }}
-      </div>
-      <div>
-        <strong>Email:</strong> {{ contact.phoneNumbers }}
-      </div>
-    </li>
-  </ul>
+    <ul>
+      <li *ngFor="let contact of contacts" class="contact-item">
+        <div class="name">
+          <strong>Name:</strong> {{ contact.nameContact }}
+          <span *ngIf="contact.nicknameContact != null"> ({{ contact.nicknameContact }})</span>
+        </div>
+        <div *ngFor="let phone of contact.phoneNumbers" class="item">
+          <div>
+            <strong>Phone:</strong> {{ phone.phoneNumber }}
+          </div>
+          <div>
+            <strong>Type:</strong> {{ phone.tagPhone }}
+          </div>
+        </div>
+        <div *ngFor="let phone of contact.mails" class="item">
+          <div>
+            <strong>Email:</strong> {{ phone.mail }}
+          </div>
+          <div>
+            <strong>Type:</strong> {{ phone.tagMail }}
+          </div>
+        </div>
+        <div class="action" >
+          <button (click)="viewContact(contact.pkContact)">Visualizar
+            <i class="fas fa-eye"></i>
+          </button>
+          <button  *ngIf="checkToken()"(click)="editContact(contact.pkContact)">Editar
+            <i class="fas fa-edit"></i>
+          </button>
+          <button *ngIf="checkToken()" (click)="deleteContact(contact.pkContact)" class="red"> Apagar
+            <i class="fas fa-trash-alt"></i>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
