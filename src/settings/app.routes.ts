@@ -5,6 +5,7 @@ import {LoginComponent} from '../pages/contact/usuario/login/login.component';
 import {CreateUserComponent} from '../pages/contact/usuario/create-user/create-user.component';
 import {ContactAddComponent} from '../pages/contact/contacts/contact-add/contact-add.component';
 import {ContactListComponent} from '../pages/contact/contacts/contact-list/contact-list.component';
+import {ViewContactComponent} from '../pages/contact/contacts/view-contact/view-contact.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -20,6 +21,7 @@ export const routes: Routes = [
       {path: 'add', component: ContactAddComponent},
       {path: 'edit/:id', component: ContactAddComponent},
       {path: 'list', component: ContactListComponent},
+      {path: 'view/:id', component: ViewContactComponent}
     ]
   },
   {path: 'login', component: LoginComponent},

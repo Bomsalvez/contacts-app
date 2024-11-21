@@ -1,0 +1,87 @@
+<div class="contact-view-container">
+  <div class="block-container">
+    <div class="group group-container">
+      <div class="form-group" id="name">
+        <label for="nameContact">Nome</label>
+        <span id="nameContact">{{ contact?.nameContact }}</span>
+      </div>
+
+      <div class="form-group nick">
+        <label for="nicknameContact">Apelido</label>
+        <span id="nicknameContact">{{ contact?.nicknameContact }}</span>
+      </div>
+
+      <div class="form-group combo-box">
+        <label for="dateBirthContact">Data de Nascimento</label>
+        <span id="dateBirthContact">{{ contact?.dateBirthContact | date }}</span>
+      </div>
+    </div>
+
+    <div class="group-container">
+      <h3>Telefones</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Número de Telefone</th>
+          <th>Tag</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let phone of contact?.phoneNumbers">
+          <td>{{ getNumber(phone.phoneNumber) }}</td>
+          <td>{{ phone.tagPhone }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="group-container">
+      <h3>Emails</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Email</th>
+          <th>Tag</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let email of contact?.mails">
+          <td>{{ email.mail }}</td>
+          <td>{{ email.tagMail }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="group-container">
+      <h3>Endereços</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>CEP</th>
+          <th>Rua</th>
+          <th>Bairro</th>
+          <th>Cidade</th>
+          <th>UF</th>
+          <th>E de Trabalho</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let address of contact?.addresses">
+          <td>{{ getCep(address.codeAddress) }}</td>
+          <td>{{ address.streetAddress }}</td>
+          <td>{{ address.districtAddress }}</td>
+          <td>{{ address.cityAddress }}</td>
+          <td>{{ address.countryAddress }}</td>
+          <td>{{ address.isWorkAddress ? 'Yes' : 'No' }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="action">
+      <button class="back-button" (click)="goBack()">Voltar</button>
+      <button class="back-button" (click)="editContact()">Editar</button>
+    </div>
+  </div>
+</div>

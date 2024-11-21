@@ -81,6 +81,7 @@ export class ContactListComponent implements OnInit {
   }
 
   viewContact(pkContact: number) {
-
+    console.log(pkContact);
+    this.router.navigate([`/contact/view/${pkContact}`]);
   }
 }
